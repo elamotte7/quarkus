@@ -1,0 +1,55 @@
+version: '3.6'
+services:
+  backend:
+    image: backend:0.0.1-SNAPSHOT
+    environment:
+      # comment this option in production
+      - JAVA_DEBUG=true
+      #- JAVA_OPTIONS=-Xms128m -Xmx512m -Djavax.net.debug=all
+      #- HTTP_PROXY=http://192.168.0.70:80
+      - HTTPS_PROXY=https://192.168.0.70:8443
+      - SSL_CERTIFICAT_FILE=/etc/ssl/server.pem
+      - SSL_CERTIFICAT_KEY_FILE=/etc/ssl/server.key
+      - SSL_PROTOCOLS=
+      - HTTP_PORT=9000
+      - HTTPS_PORT=9443
+      - OIDC_ISSUER=https://accounts.google.com
+      - OIDC_PROVIDER_METADATA_URL=https://www.googleapis.com/oauth2/v3/certs
+      - DATASOURCE_URL=jdbc:mariadb://mariadb:3306/test
+      - DATASOURCE_DRIVER=
+      - DATASOURCE_USER=quarkus
+      - DATASOURCE_PWD=quarkus
+      - CONSOLE_LOG_ENABLED=
+      - CONSOLE_LOG_FORMAT=
+      - CONSOLE_LOG_LEVEL=
+      - FILE_LOG_ENABLED=
+      - FILE_LOG_LEVEL=
+      - FILE_LOG_FORMAT=
+      - FILE_LOG_PATH=
+      - HIBERNATE_DB_GENERATION=
+      - HIBERNATE_LOG_SQL=
+    volumes:
+      - ./init/certs:/etc/ssl/
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    networks:
+      - default
+    depends_on:
+      - mariadb
+  mariadb:
+    image: mariadb:10.3
+    command: [ "mysqld", "--lower_case_table_names=1", "--character-set-server=utf8", "--innodb-flush-method=fsync" ]
+    hostname: mariadb
+    environment:
+      - MYSQL_DATABASE=quarkus
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./data/mariadb/data:/var/lib/mysql
+      - ./init/mariadb:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    networks:
+      - default
+networks:
+  default: {}
