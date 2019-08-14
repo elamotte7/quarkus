@@ -22,6 +22,11 @@
 
         <maven.compiler.release>11</maven.compiler.release>
 
+        <!-- Docker -->
+        <docker.image.name>YOUR_REGISTRY/backend</docker.image.name>
+        <docker.image.tag>${project.version}</docker.image.tag>
+
+
         <!-- Quarkus -->
         <quarkus.version>0.20.0</quarkus.version>
         <nimbus-jose-jwt.version>7.5.1</nimbus-jose-jwt.version>
@@ -223,6 +228,60 @@
                         <goals>
                             <goal>jandex</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <configuration>
+                    <serverId>registry</serverId>
+                    <registryUrl>https://YOUR_REGISTRY</registryUrl>
+                    <imageName>${docker.image.name}:${docker.image.tag}</imageName>
+                    <forceTags>true</forceTags>
+                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>*-runner.jar</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>/lib/*</include>
+                        </resource>
+                    </resources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-image</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>tag-image</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <image>${docker.image.name}:${docker.image.tag}</image>
+                            <newName>${docker.image.name}:${docker.image.tag}</newName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>push-image</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <imageName>${docker.image.name}:${docker.image.tag}</imageName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
