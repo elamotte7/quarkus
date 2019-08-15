@@ -435,7 +435,7 @@ The entries are relative to the root of the generated Uber-Jar. You can specify 
 
 ## Testing Secured api
 
-First generate a valid JWT Token by running fr.util.GenerateToken
+First generate a valid JWT Token by running GenerateToken
 
 The result is : 
 
