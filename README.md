@@ -1,6 +1,6 @@
 # Backend
 
-[![Build Status](https://travis-ci.org/elamotte7/quarkus.svg?branch=master)](https://travis-ci.org/elamotte7/quarkus)
+[![Build Status](https://travis-ci.org/elamotte7/quarkus.svg?branch=0.20.0)](https://travis-ci.org/elamotte7/quarkus)
 
 ## Description
 
