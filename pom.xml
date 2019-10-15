@@ -27,7 +27,7 @@
         <docker.image.tag>${project.version}</docker.image.tag>
 
         <!-- Quarkus -->
-        <quarkus.version>0.21.1</quarkus.version>
+        <quarkus.version>0.24.0</quarkus.version>
         <nimbus-jose-jwt.version>7.5.1</nimbus-jose-jwt.version>
         <version.eclipse.jwt>1.1</version.eclipse.jwt>
 
@@ -41,6 +41,11 @@
                 <version>${quarkus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.microprofile.config</groupId>
+                <artifactId>microprofile-config-api</artifactId>
+                <version>1.2.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

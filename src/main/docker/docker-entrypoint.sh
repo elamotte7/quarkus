@@ -1,5 +1,4 @@
 #!/bin/sh
-
 JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager ${JAVA_OPTIONS:-}"
 
 echo ${JAVA_OPTIONS}
