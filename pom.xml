@@ -27,7 +27,7 @@
         <docker.image.tag>${project.version}</docker.image.tag>
 
         <!-- Quarkus -->
-        <quarkus.version>1.0.0.CR1</quarkus.version>
+        <quarkus.version>1.1.0.CR1</quarkus.version>
         <nimbus-jose-jwt.version>7.9</nimbus-jose-jwt.version>
         <version.eclipse.jwt>1.1</version.eclipse.jwt>
 
