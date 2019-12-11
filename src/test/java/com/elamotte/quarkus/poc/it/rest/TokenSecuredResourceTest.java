@@ -5,6 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.HttpURLConnection;
@@ -16,6 +17,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 /**
  * Tests of the TokenSecuredResource REST endpoints
  */
+@Disabled
 @QuarkusTest
 public class TokenSecuredResourceTest {
 
