@@ -77,7 +77,6 @@ public class JwtFilterWithCustomSecurityContext implements ContainerRequestFilte
         }
 
         if (claimsSet != null && claimsSet.getSubject() != null) {
-            final SecurityContext securityContext = requestContext.getSecurityContext();
             requestContext.setSecurityContext(new SecurityContext() {
                 @Override
                 public Principal getUserPrincipal() {
