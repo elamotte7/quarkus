@@ -1,10 +1,11 @@
 package com.elamotte.quarkus.poc.util;
 
-import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSSigner;
+import com.elamotte.quarkus.poc.security.filter.MockJwtFilterWithCustomSecurityContext;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.RSAEncrypter;
 import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import net.minidev.json.JSONObject;
@@ -181,6 +182,42 @@ public class TokenUtils {
     public static int currentTimeInSecs() {
         long currentTimeMS = System.currentTimeMillis();
         return (int) (currentTimeMS / 1000);
+    }
+
+    public static String CreateToken(String userId) throws JOSEException {
+        RSAKey rsaPublicJWK =  MockJwtFilterWithCustomSecurityContext.rsaJWK.toPublicJWK();
+
+        JWSSigner signer = new RSASSASigner(MockJwtFilterWithCustomSecurityContext.rsaJWK);
+
+        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                .subject(userId)
+                .issuer("https://accounts.google.com")
+                .expirationTime(new Date(new Date().getTime() + 60 * 1000))
+                .build();
+
+        JWEHeader header = new JWEHeader(JWEAlgorithm.RSA_OAEP_256, EncryptionMethod.A128GCM);
+
+        // Create the encrypted JWT object
+        EncryptedJWT jwt = new EncryptedJWT(header, claimsSet);
+
+        // Create an encrypter with the specified public RSA key
+        RSAEncrypter encrypter = new RSAEncrypter(rsaPublicJWK);
+
+        // Do the actual encryption
+        jwt.encrypt(encrypter);
+
+        // Serialise to JWT compact form
+        String jwtString = jwt.serialize();
+
+        SignedJWT signedJWT = new SignedJWT(
+                new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(MockJwtFilterWithCustomSecurityContext.rsaJWK.getKeyID()).build(),
+                claimsSet);
+
+        signedJWT.sign(signer);
+
+        String s = signedJWT.serialize();
+        System.out.println(s);
+        return s;
     }
 
 }

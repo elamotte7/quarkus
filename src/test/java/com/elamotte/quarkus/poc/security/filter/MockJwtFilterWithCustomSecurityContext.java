@@ -1,6 +1,6 @@
-package com.elamotte.quarkus.poc.rest.security.filter;
+package com.elamotte.quarkus.poc.security.filter;
 
-import com.elamotte.quarkus.poc.rest.annotation.JWTTokenNeeded;
+import com.elamotte.quarkus.poc.rest.security.filter.JwtFilterWithCustomSecurityContext;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -8,29 +8,25 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import io.quarkus.test.Mock;
 import org.apache.http.HttpHeaders;
 
-import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Provider;
 import java.security.Principal;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Provider
+
+@Mock
 @ApplicationScoped
-@JWTTokenNeeded
-@Priority(Priorities.AUTHENTICATION)
-public class JwtFilterWithCustomSecurityContext implements ContainerRequestFilter {
+public class MockJwtFilterWithCustomSecurityContext extends JwtFilterWithCustomSecurityContext {
 
     @Context
     UriInfo uriInfo;
@@ -55,9 +51,7 @@ public class JwtFilterWithCustomSecurityContext implements ContainerRequestFilte
         String jwtToken = "";
 
         try {
-            jwtToken = requestContext
-                    .getHeaderString(HttpHeaders.AUTHORIZATION)
-                    .replaceFirst("Bearer ", "");
+            jwtToken = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION).replaceFirst("Bearer ", "");
         } catch (NullPointerException e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("#### NO TOKEN!").build());
             return;
@@ -77,7 +71,6 @@ public class JwtFilterWithCustomSecurityContext implements ContainerRequestFilte
         }
 
         if (claimsSet != null && claimsSet.getSubject() != null) {
-            final SecurityContext securityContext = requestContext.getSecurityContext();
             requestContext.setSecurityContext(new SecurityContext() {
                 @Override
                 public Principal getUserPrincipal() {
