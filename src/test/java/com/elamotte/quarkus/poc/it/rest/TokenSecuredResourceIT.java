@@ -1,10 +1,10 @@
 package com.elamotte.quarkus.poc.it.rest;
 
-import io.quarkus.test.junit.SubstrateTest;
+import io.quarkus.test.junit.NativeImageTest;
 
 /**
  * Native tests
  */
-@SubstrateTest
+@NativeImageTest
 public class TokenSecuredResourceIT extends TokenSecuredResourceTest {
 }

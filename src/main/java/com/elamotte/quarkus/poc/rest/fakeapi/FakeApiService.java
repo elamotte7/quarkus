@@ -1,6 +1,6 @@
 package com.elamotte.quarkus.poc.rest.client.fakeapi;
 
-import com.elamotte.quarkus.poc.rest.client.fakeapi.model.Todo;
+import com.elamotte.quarkus.poc.rest.fakeapi.model.Todo;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.GET;

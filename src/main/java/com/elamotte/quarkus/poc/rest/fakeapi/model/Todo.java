@@ -1,4 +1,4 @@
-package com.elamotte.quarkus.poc.rest.client.fakeapi.model;
+package com.elamotte.quarkus.poc.rest.fakeapi.model;
 
 public class Todo {
     private Integer userId;

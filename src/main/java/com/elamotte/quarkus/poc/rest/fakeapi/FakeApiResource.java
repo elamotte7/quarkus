@@ -1,6 +1,6 @@
-package com.elamotte.quarkus.poc.rest.client.fakeapi;
+package com.elamotte.quarkus.poc.rest.fakeapi;
 
-import com.elamotte.quarkus.poc.rest.client.fakeapi.model.Todo;
+import com.elamotte.quarkus.poc.rest.fakeapi.model.Todo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ public class FakeApiResource {
 
     @Inject
     @RestClient
-    FakeApiService fakeApiService;
+    com.elamotte.quarkus.poc.rest.client.fakeapi.FakeApiService fakeApiService;
 
 
     @GET
